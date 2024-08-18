@@ -1,0 +1,37 @@
+// ==UserScript==
+// @name         Open links from fitgirl-repacks pastebin
+// @namespace    http://tampermonkey.net/
+// @version      2024-08-18
+// @description  try to take over the world!
+// @author       You
+// @match        https://paste.fitgirl-repacks.site/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=fitgirl-repacks.site
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    // Function to open the links
+    const openLinks = () => {
+        const links = document.querySelectorAll('a[href*=fuckingfast]')
+        links.forEach(link => {
+            window.open(link.href, '_blank')
+        })
+    };
+    // Observe changes in the DOM to detect dynamically loaded content
+    const observer = new MutationObserver((mutationsList, observer) => {
+        // Loop through each mutation
+        for (const mutation of mutationsList) {
+            // Check if nodes were added
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                openLinks(); // Attempt to open links whenever new nodes are added
+            }
+        }
+    });
+    // Start observing the document body for changes
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Also run the function initially in case some links are already present
+    window.alert("Move this to a new window so that you can close it properly later, and not get spammed with a bunch of tabs! (Moving the tab seems to auto remove this alert)");
+    openLinks();
+})();
